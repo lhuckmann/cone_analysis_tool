@@ -107,6 +107,28 @@ def nl(xyz1, xyz2, r_cut, cell, R_ABS_MAT=np.array([])):
             NL.append(neighs)
     return IDX, NL
 
+
+def smart_nl(xyz1, xyz2, elem1, elem2, cut_dict, cell, R_ABS_MAT=np.array([])):
+    IDX=[]
+    NL=[]
+    # Note, the cut_dict need the following form
+    # cut_dict={'Si': {'Si': 5.0, 'O': 2.25, 'N': 2.25},
+    #           'N': {'Si': 2.25, 'O': 2.25, 'N': 2.25},
+    #           'O': {'Si': 2.25, 'O': 2.25, 'N': 2.25}}
+    cut_dict=np.array([[dyn_dict[ii][jj] for jj in elem2] for ii in elem1])
+    if R_ABS_MAT.any():
+        for ii in range(len(R_ABS_MAT)):
+            IDX.append(ii)
+            neighs = np.where((R_ABS_MAT[ii] < dyn_cut[ii]) & (R_ABS_MAT[ii] > 0))[0]
+            NL.append(neighs)
+    else:
+        R_ABS_MAT = pdm(xyz1, xyz2, cell)
+        for ii in range(len(R_ABS_MAT)):
+            IDX.append(ii)
+            neighs = np.where((R_ABS_MAT[ii] < dyn_cut[ii]) & (R_ABS_MAT[ii] > 0))[0]
+            NL.append(neighs)
+    return IDX, NL
+
 #--------------------------------
 #   READ XYZ
 #
