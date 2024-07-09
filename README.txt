@@ -3,7 +3,7 @@ _________________________________________________________
 	CONE ANALYSIS TOOL
 _________________________________________________________
 
-Version: 05-08-23
+Version: 09-07-24
 
 This is a preliminary version of my cone analysis tool. It provides cone angles
 for any desired coordination polyhedra within an adjustable cut-off. It is
@@ -11,6 +11,9 @@ fully PBC-corrected and applicable to any triclinic lattices. Projection from
 crystallographic -> orthogonal basis has to be done manually by now (see 'mic').
 Comes with an example box of amorphous silicon nitride (a-Si3N4).
 Detailed documentation is provided below.
+
+If you use this code, please cite 
+Hückmann, L.; Cottom, J.; Meyer, J. Adv. Phys. Res. 2024, 3, 2300109 (DOI: https://doi.org/10.1002/apxr.202300109). 
 
 Requirements:
 - numpy
