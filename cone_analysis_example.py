@@ -1,6 +1,8 @@
 import numpy as np
-import cone_analysis_tool as cat
+import cone_analysis_tool 
 import time
+
+cat=cone_analysis_tool.cone_analysis_tool()
 
 global_start=time.time()
 print('START CONE ANALYSIS\n')
@@ -8,8 +10,7 @@ print('atom ID', 'cone angle')
 
 #---- set up cell ---
 cell_const=14.6488
-x, y, z = cat.read_xyz('geom_opt.xyz')
-xyz = np.array([x, y, z]).T
+xyz = cat.read_xyz('geom_opt.xyz')
 cell = [[cell_const, 0, 0], [0.0, cell_const, 0], [0.0, 0.0, cell_const]]
 
 r_cut = 2.25 # cut-off for the neighbor list
@@ -36,3 +37,5 @@ cone=np.array(cone)
 print(40*'+')
 print('NL time:', np.round(nl_time,5), '\nsampling time:', np.round(np.sum(TIME),5), '\nsampling time/atom:', np.round(np.mean(TIME),5), '\n')
 print('Total runtime:', np.round(time.time()-global_start,5))
+
+np.savetxt('cone_angles.dat', np.array([np.arange(0,len(cone),1), cone]).T, header='idx\t theta [deg]', fmt=['%u', '%1.6f'])
