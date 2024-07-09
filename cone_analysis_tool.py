@@ -80,6 +80,9 @@ class cone_analysis_tool:
     # Requires:
     #   xyz1      | array/list (3,N) coordinates of the particles of interest
     #   xyz2      | array/list (3,M) coordinates of the target particles.
+    #   elem1     | array/list (M,) list with strings of the element names
+    #   elem2
+    #   dyn_dict  | dictonary with the cut-offs. Shape see below.
     #   r_cut     | float () cut-off radius for 1st coordination shell
     #   cell      | [array], shape (3,3) cell matrix of shape. See MIC.
     #   R_ABS_MAT | array/list (N,M) if already given: The PDM. (optional)
@@ -94,22 +97,28 @@ class cone_analysis_tool:
     #
     #   Can use external PDM.
     #
-    def nl(self, xyz1, xyz2, r_cut, cell, R_ABS_MAT=np.array([])):
+
+    def nl(self, xyz1, xyz2, elem1, elem2, dyn_dict, cell, R_ABS_MAT=np.array([])):
         IDX=[]
         NL=[]
+        # Note, the dyn_dict need the following form
+        # dyn_dict={'Si': {'Si': 5.0, 'O': 2.25, 'N': 2.25},
+        #           'N': {'Si': 2.25, 'O': 2.25, 'N': 2.25},
+        #           'O': {'Si': 2.25, 'O': 2.25, 'N': 2.25}}
+        dyn_cut=np.array([[dyn_dict[ii][jj] for jj in elem2] for ii in elem1])
         if R_ABS_MAT.any():
             for ii in range(len(R_ABS_MAT)):
-                IDX.append(ii) 
-                neighs = np.where((R_ABS_MAT[ii] < r_cut) & (R_ABS_MAT[ii] > 0))[0]
+                IDX.append(ii)
+                neighs = np.where((R_ABS_MAT[ii] < dyn_cut[ii]) & (R_ABS_MAT[ii] > 0))[0]
                 NL.append(neighs)
         else:
             R_ABS_MAT = self.pdm(xyz1, xyz2, cell)
             for ii in range(len(R_ABS_MAT)):
-                IDX.append(ii) 
-                neighs = np.where((R_ABS_MAT[ii] < r_cut) & (R_ABS_MAT[ii] > 0))[0]
+                IDX.append(ii)
+                neighs = np.where((R_ABS_MAT[ii] < dyn_cut[ii]) & (R_ABS_MAT[ii] > 0))[0]
                 NL.append(neighs)
         return IDX, NL
-    
+
     #--------------------------------
     #   READ XYZ
     #
@@ -122,7 +131,9 @@ class cone_analysis_tool:
     #   only single frame, no trajectory
     #
     def read_xyz(self,filename):
-        return np.loadtxt(filename, skiprows=2, usecols=(1,2,3))
+        elem=np.genfromtxt(filename, skip_header=2, usecols=[0], dtype='str')
+        xyz=np.loadtxt(filename, skiprows=2, usecols=(1,2,3))
+        return elem, xyz
     
     
     #--------------------------------
@@ -194,3 +205,18 @@ class cone_analysis_tool:
         cone=self.angle(xyz0, closest, sp[opt_idx],cell)
         return sp, sp[opt_idx], dist, cone
     
+    #--------------------------------
+    #   COORDINATION NUMBER
+    #
+    # Requires:
+    #   neighs    | neighbor list
+    #
+    # Returns:
+    #   coordination number 
+    #
+    # Notes:
+    #   --
+    #    
+    def get_CN(self, neighs):
+        return np.array([len(ii) for ii in neighs])
+        
