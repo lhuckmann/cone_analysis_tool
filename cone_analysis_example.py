@@ -35,7 +35,7 @@ for ii in idxs:
     TIME.append(time.time()-start)
 
 cone=np.array(cone)
-cn=cat.get_CN(nl)
+cn=cat.get_CN(nl) #getting the coordination numbers
 print(cn)
 #---- print results ---
 print(40*'+')
