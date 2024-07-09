@@ -9,7 +9,12 @@ import random
 
 class cone_analysis_tool:
     def __init__(self):
-        print('Welcome to the cone analysis tool')
+        print(41*'=')
+        print('\tWelcome to the cone analysis tool')
+        print(41*'=')
+        print('\n If you use this code, please cite:\nHückmann, L.; Cottom, J.; Meyer, J. Adv. Phys. Res. 2024, 3, 2300109 (DOI: https://doi.org/10.1002/apxr.202300109). ')
+	    
+    #--------------------------------
     #--------------------------------
     #   MINIMUM IMAGE VECTOR (MIC)
     #
