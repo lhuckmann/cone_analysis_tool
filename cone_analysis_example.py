@@ -36,9 +36,8 @@ for ii in idxs:
 
 cone=np.array(cone)
 cn=cat.get_CN(nl) #getting the coordination numbers
-print(cn)
+
 #---- print results ---
-print(40*'+')
 print('NL time:', np.round(nl_time,5), '\nsampling time:', np.round(np.sum(TIME),5), '\nsampling time/atom:', np.round(np.mean(TIME),5), '\n')
 print('Total runtime:', np.round(time.time()-global_start,5))
 
