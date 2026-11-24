@@ -5,7 +5,7 @@
 Please use (https://github.com/lhuckmann/polyopening.git)
 
 
-#CONE ANALYSIS TOOL
+# CONE ANALYSIS TOOL
 
 Version: 09-07-24
 
